@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Busca-Ritmes · Nivells</title>
+  <link rel="stylesheet" href="levels.css" />
+</head>
+<body>
+
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <div class="page">
+
+    <header class="lvl-header">
+      <a href="index.html" class="back-btn" title="Tornar">←</a>
+      <div class="lvl-header-txt">
+        <h1>Selecciona Nivell</h1>
+        <p>De Largo a Presto · 8 reptes musicals</p>
+      </div>
+      <div style="width:40px"></div><!-- spacer -->
+    </header>
+
+    <div class="levels-grid" id="levels-grid"></div>
+
+    <footer class="lvl-foot"></footer>
+
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    'use strict';
+
+    const NOTE_SVG_SM = {
+      n1: `<svg viewBox="0 0 18 32" width="14" height="24"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="currentColor"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+      n2: `<svg viewBox="0 0 18 32" width="14" height="24"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="none" stroke="currentColor" stroke-width="2.2"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+      n3: `<svg viewBox="0 0 25 32" width="17" height="24"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="none" stroke="currentColor" stroke-width="2.2"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="21.5" cy="23.5" r="2.8" fill="currentColor"/></svg>`,
+      n4: `<svg viewBox="0 0 22 16" width="18" height="13"><ellipse cx="11" cy="8" rx="9.5" ry="6.5" transform="rotate(-8 11 8)" fill="none" stroke="currentColor" stroke-width="3.2"/></svg>`
+    };
+
+    const grid = document.getElementById('levels-grid');
+
+    LEVELS.forEach((lvl, i) => {
+      const best  = getBestTime(lvl.id);
+      const stars = getStars(lvl.id, best);
+
+      const card = document.createElement('a');
+      card.href  = `game.html?level=${lvl.id}`;
+      card.className = 'lvl-card';
+      card.style.setProperty('--accent', lvl.accent);
+      card.style.setProperty('--glow',   lvl.glow);
+      card.style.animationDelay = (i * 0.07) + 's';
+
+      // Barra de dificultat (segments omplerts)
+      const diffSegs = Array.from({length: 8}, (_, j) =>
+        `<div class="dseg ${j <= i ? 'filled' : ''}"></div>`
+      ).join('');
+
+      // Estrelles
+      const starsHtml = best
+        ? Array.from({length:3}, (_,j) =>
+            `<span class="star ${j < stars ? 'lit' : ''}">★</span>`
+          ).join('')
+        : '';
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-tempo">${lvl.tempo}</div>
+          <div class="card-badge">${lvl.rows}×${lvl.cols}</div>
+        </div>
+        <div class="card-center">
+          <h2 class="card-name">${lvl.name}</h2>
+          <p class="card-desc">${lvl.desc}</p>
+        </div>
+        <div class="card-bottom">
+        <div class="card-info">
+          <span class="mine-count">
+            <svg viewBox="0 0 22 22" width="14" height="14" style="color:var(--accent)"><rect x="4" y="7" width="14" height="9" rx="1.5" fill="currentColor"/></svg>
+            ${lvl.mines} silencis
+          </span>
+          <div class="card-stars">${starsHtml}</div>
+        </div>
+        <div class="diff-bar">${diffSegs}</div>
+        ${best ? `<div class="card-best">Millor temps: <strong>${fmtTime(best)}</strong></div>` : '<div class="card-best">No jugat</div>'}
+        </div>
+      `;
+
+      // Efecte 3D tilt
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width  - 0.5) * 16;
+        const y = ((e.clientY - r.top)  / r.height - 0.5) * 16;
+        card.style.transform = `perspective(700px) rotateX(${-y}deg) rotateY(${x}deg) scale(1.04)`;
+        card.style.transition = 'transform .08s ease';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+        card.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1), box-shadow .3s ease';
+      });
+
+      grid.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>

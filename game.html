@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Busca-Ritmes</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="container">
+
+    <header class="game-header">
+      <a href="levels.html" class="back-btn" title="Canviar nivell">←</a>
+      <div class="game-header-center">
+        <h1 id="level-name">Busca-Ritmes</h1>
+        <p class="level-tempo" id="level-tempo"></p>
+      </div>
+      <div style="width:36px"></div>
+    </header>
+
+    <div class="hud" id="hud">
+      <div class="counter">
+        <span class="counter-label">Silencis</span>
+        <span class="counter-value" id="mines-left">—</span>
+      </div>
+      <div class="hud-btns">
+        <button id="reset-btn" title="Nova partida (R)">↺</button>
+        <button id="mute-btn" title="Silenciar so">🔊</button>
+      </div>
+      <div class="counter">
+        <span class="counter-label">Temps</span>
+        <span class="counter-value timer-val" id="timer">000</span>
+      </div>
+    </div>
+
+    <div id="board" role="grid" aria-label="Tauler de Busca-Ritmes"></div>
+
+    <div class="legend" id="legend">
+      <span class="leg l1" title="1 silenci adjacent">
+        <svg viewBox="0 0 18 32" width="12" height="22"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="currentColor"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        Negra
+      </span>
+      <span class="leg l2" title="2 silencis adjacents">
+        <svg viewBox="0 0 18 32" width="12" height="22"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="none" stroke="currentColor" stroke-width="2.2"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        Blanca
+      </span>
+      <span class="leg l3" title="3 silencis adjacents">
+        <svg viewBox="0 0 25 32" width="15" height="22"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="none" stroke="currentColor" stroke-width="2.2"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="21.5" cy="23.5" r="2.8" fill="currentColor"/></svg>
+        Bl.Punt
+      </span>
+      <span class="leg l4" title="4 silencis adjacents">
+        <svg viewBox="0 0 22 16" width="16" height="12"><ellipse cx="11" cy="8" rx="9.5" ry="6.5" transform="rotate(-8 11 8)" fill="none" stroke="currentColor" stroke-width="3.2"/></svg>
+        Rodona
+      </span>
+      <span class="leg lflag">🪄 Batuta</span>
+    </div>
+
+    <p class="hint">Clic esquerre: revelar · Clic dret: batuta</p>
+
+  </div>
+
+  <!-- Modal fi de partida -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-icon" id="modal-icon"></div>
+      <h2 id="modal-title"></h2>
+      <p id="modal-msg"></p>
+      <p class="modal-time" id="modal-time"></p>
+      <div class="modal-stars" id="modal-stars"></div>
+      <button id="modal-btn">Nova Partida</button>
+      <a href="levels.html" class="modal-back">Canviar nivell</a>
+    </div>
+  </div>
+
+  <!-- Tutorial overlay -->
+  <div id="tut-overlay" class="tut-overlay hidden"></div>
+  <div id="tut-card" class="tut-card hidden" role="dialog" aria-modal="true">
+    <div class="tut-step-dots" id="tut-dots"></div>
+    <h3 id="tut-title"></h3>
+    <div id="tut-body" class="tut-body"></div>
+    <div class="tut-demo" id="tut-demo"></div>
+    <div class="tut-nav">
+      <button id="tut-prev" class="tut-btn-sec">← Anterior</button>
+      <button id="tut-skip" class="tut-btn-sec">Saltar</button>
+      <button id="tut-next" class="tut-btn-pri">Següent →</button>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="sounds.js"></script>
+  <script src="game.js"></script>
+  <script src="tutorial.js"></script>
+</body>
+</html>

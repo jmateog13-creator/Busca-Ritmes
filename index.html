@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Busca-Ritmes</title>
+  <link rel="stylesheet" href="landing.css" />
+</head>
+<body>
+
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <!-- Notes flotants de fons -->
+  <div class="bg-notes" aria-hidden="true">
+    <span class="bn c1" style="left:6%;top:18%">
+      <svg viewBox="0 0 18 32" width="32" height="50"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="currentColor"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </span>
+    <span class="bn c2" style="left:82%;top:22%;animation-delay:1.1s">
+      <svg viewBox="0 0 18 32" width="38" height="60"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="none" stroke="currentColor" stroke-width="2.2"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </span>
+    <span class="bn c3" style="left:14%;top:72%;animation-delay:0.5s">
+      <svg viewBox="0 0 25 32" width="30" height="46"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="none" stroke="currentColor" stroke-width="2.2"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="21.5" cy="23.5" r="2.8" fill="currentColor"/></svg>
+    </span>
+    <span class="bn c4" style="left:75%;top:68%;animation-delay:2s">
+      <svg viewBox="0 0 22 16" width="36" height="26"><ellipse cx="11" cy="8" rx="9.5" ry="6.5" transform="rotate(-8 11 8)" fill="none" stroke="currentColor" stroke-width="3.2"/></svg>
+    </span>
+    <span class="bn c1" style="left:48%;top:8%;animation-delay:1.6s;opacity:.07">
+      <svg viewBox="0 0 18 32" width="52" height="82"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="currentColor"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </span>
+    <span class="bn c2" style="left:30%;top:85%;animation-delay:0.3s">
+      <svg viewBox="0 0 22 22" width="24" height="24"><line x1="3" y1="7" x2="19" y2="7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".55"/><rect x="4" y="7" width="14" height="9" rx="1.5" fill="currentColor"/></svg>
+    </span>
+    <span class="bn c3" style="left:64%;top:84%;animation-delay:2.3s">
+      <svg viewBox="0 0 18 32" width="24" height="38"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="none" stroke="currentColor" stroke-width="2.2"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </span>
+    <span class="bn c4" style="left:92%;top:50%;animation-delay:0.9s;opacity:.06">
+      <svg viewBox="0 0 22 16" width="44" height="32"><ellipse cx="11" cy="8" rx="9.5" ry="6.5" transform="rotate(-8 11 8)" fill="none" stroke="currentColor" stroke-width="3.2"/></svg>
+    </span>
+  </div>
+
+  <main class="landing-card">
+
+    <div class="brand-badge">Busca-Ritmes</div>
+
+    <h1 class="landing-title">Geometria<br>de la Tensió</h1>
+    <p class="landing-sub">Un Cercamines per a la classe de Música</p>
+
+    <!-- Mini tauler decoratiu -->
+    <div class="preview-board" aria-hidden="true" id="preview"></div>
+
+    <div class="landing-actions">
+      <a href="levels.html" class="lbtn lbtn-primary">
+        <span>▶</span> Jugar
+      </a>
+      <a href="game.html?level=2&tutorial=1" class="lbtn lbtn-secondary">
+        <span>?</span> Tutorial
+      </a>
+    </div>
+
+    <div class="landing-pills">
+      <span>8 Nivells</span>
+      <span>Largo → Presto</span>
+      <span>4 Figures Rítmiques</span>
+    </div>
+
+  </main>
+
+  <footer class="lnd-foot"></footer>
+
+  <script>
+    // Genera mini tauler decoratiu animat
+    const layout = [
+      ['h','h','h','n1','h','n2','h'],
+      ['h','n1','h','n3','n2','n1','h'],
+      ['n2','n1','h','n4','h','n2','h'],
+      ['h','h','h','n1','n1','h','fl'],
+      ['e','e','n1','n2','h','h','h'],
+    ];
+    const svgs = {
+      n1: `<svg viewBox="0 0 18 32" width="13" height="22"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="currentColor"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+      n2: `<svg viewBox="0 0 18 32" width="13" height="22"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="none" stroke="currentColor" stroke-width="2.2"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+      n3: `<svg viewBox="0 0 25 32" width="15" height="22"><ellipse cx="7" cy="27" rx="6.5" ry="4.5" transform="rotate(-22 7 27)" fill="none" stroke="currentColor" stroke-width="2.2"/><line x1="13.2" y1="24.5" x2="13.2" y2="4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="21.5" cy="23.5" r="2.8" fill="currentColor"/></svg>`,
+      n4: `<svg viewBox="0 0 22 16" width="16" height="11"><ellipse cx="11" cy="8" rx="9.5" ry="6.5" transform="rotate(-8 11 8)" fill="none" stroke="currentColor" stroke-width="3.2"/></svg>`,
+    };
+    const colors = { n1:'#d4a017', n2:'#3d8ef0', n3:'#28c87a', n4:'#c0334d' };
+    const board = document.getElementById('preview');
+    let i = 0;
+    layout.flat().forEach((type, idx) => {
+      const d = document.createElement('div');
+      d.className = 'pv-cell';
+      d.style.animationDelay = (idx * 0.04) + 's';
+      if (type === 'e') { d.classList.add('pv-empty'); }
+      else if (type === 'h') { d.classList.add('pv-hidden'); }
+      else if (type === 'fl') { d.classList.add('pv-flag'); d.textContent = '🪄'; }
+      else {
+        d.classList.add('pv-note');
+        d.style.color = colors[type];
+        d.innerHTML = svgs[type];
+      }
+      board.appendChild(d);
+    });
+  </script>
+
+</body>
+</html>
