@@ -93,16 +93,26 @@ body::before {
 .timer-val { color: #4ea8f5; text-shadow: 0 0 14px rgba(78,168,245,.5); }
 
 .hud-btns { display: flex; gap: 8px; }
-#reset-btn, #mute-btn {
+#reset-btn, #mute-btn, #flag-btn {
   background: var(--surface); border: 1px solid var(--border); border-radius: 50%;
   width: 40px; height: 40px; font-size: 1.1rem; color: var(--txt);
   cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: background .15s, transform .22s; flex-shrink: 0;
+  transition: background .15s, transform .22s, border-color .15s, box-shadow .15s; flex-shrink: 0;
 }
 #reset-btn:hover  { background: rgba(255,255,255,.10); transform: rotate(160deg) scale(1.1); }
 #reset-btn:active { transform: rotate(160deg) scale(.93); }
 #mute-btn:hover   { background: rgba(255,255,255,.10); transform: scale(1.1); }
 #mute-btn:active  { transform: scale(.92); }
+#flag-btn:hover   { background: rgba(255,255,255,.10); transform: scale(1.1); }
+#flag-btn:active  { transform: scale(.92); }
+/* Mode batuta actiu: el botó s'il·lumina amb l'accent del nivell */
+#flag-btn.active {
+  border-color: var(--lvl-accent, #d4a017);
+  background: color-mix(in srgb, var(--lvl-accent, #d4a017) 22%, transparent);
+  box-shadow: 0 0 0 2px var(--lvl-accent, #d4a017) inset, 0 0 14px var(--glow, rgba(212,160,23,.45));
+}
+/* En mode batuta, el cursor sobre les caselles insinua "marcar" */
+body.flag-mode .cell.c-hidden { cursor: cell; }
 
 /* ── Board ───────────────────────────────────────────────── */
 #board {

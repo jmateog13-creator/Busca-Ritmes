@@ -29,11 +29,17 @@ const NOTE_CLS  = ['', 'l1',  'l2',  'l3',  'l4'];
 
 // ─── CSS dinàmic ──────────────────────────────────────────
 const root = document.documentElement;
-root.style.setProperty('--cell',       `${CELL_PX}px`);
+// --cell responsive: es topa al px de disseny (desktop intacte) però encongeix
+// per cabre en amplada I alçada en pantalles petites (tablet/portàtils petits).
+root.style.setProperty('--cell',
+  `min(${CELL_PX}px, ` +
+  `calc((100vw - 40px - ${(COLS - 1) * GAP_PX}px) / ${COLS}), ` +
+  `calc((100vh - 240px - ${(ROWS - 1) * GAP_PX}px) / ${ROWS}))`);
 root.style.setProperty('--cols',       COLS);
 root.style.setProperty('--rows',       ROWS);
 root.style.setProperty('--gap',        `${GAP_PX}px`);
 root.style.setProperty('--lvl-accent', LVL.accent);
+root.style.setProperty('--glow',       LVL.glow);
 
 document.getElementById('level-name').textContent  = `${LVL.name}`;
 document.getElementById('level-tempo').textContent = LVL.tempo;
@@ -43,6 +49,7 @@ document.title = `Busca-Ritmes · ${LVL.name}`;
 let board      = [];
 let phase      = 'idle';
 let firstClick = true;
+let flagMode   = false;   // mode batuta: en tàctil, un toc marca en comptes de revelar
 let flags      = 0;
 let seconds    = 0;
 let timerID    = null;
@@ -191,6 +198,10 @@ function onLeftClick(e) {
   if (phase === 'won' || phase === 'lost') return;
   const r = +this.dataset.r, c = +this.dataset.c;
   const cell = board[r][c];
+
+  // Mode batuta (tàctil): un toc marca/desmarca en comptes de revelar.
+  if (flagMode) { toggleFlag(r, c); return; }
+
   if (cell.isFlagged || cell.isRevealed) return;
 
   if (firstClick) {
@@ -215,6 +226,12 @@ function onRightClick(e) {
   e?.preventDefault?.();
   if (phase === 'won' || phase === 'lost') return;
   const r = +this.dataset.r, c = +this.dataset.c;
+  toggleFlag(r, c);
+}
+
+// Marca/desmarca una casella amb la batuta. Compartit per clic dret,
+// tecla F i el mode batuta tàctil.
+function toggleFlag(r, c) {
   const cell = board[r][c];
   if (cell.isRevealed) return;
 
@@ -276,6 +293,7 @@ function renderStaggered(cells, originR, originC) {
 function triggerDeath(clickR, clickC) {
   stopTimer();
   phase = 'lost';
+  if (window.AulaTechBridge) window.AulaTechBridge.sendOnce('busca-ritmes', { completat: false, tempsMs: seconds * 1000 });
 
   Sounds.explode();
 
@@ -341,7 +359,9 @@ function checkWin() {
 
   stopTimer();
   phase = 'won';
+  seconds = Math.max(1, seconds); // evita "Temps: —" / 0★ en victòries instantànies
   saveBestTime(LVL.id, seconds);
+  if (window.AulaTechBridge) window.AulaTechBridge.sendOnce('busca-ritmes', { completat: true, tempsMs: seconds * 1000 });
 
   Sounds.victory();
   $board.classList.add('state-won');
@@ -466,7 +486,7 @@ function showModal(won) {
   if (won) {
     $modalIcon.innerHTML = SVG.n4;
     $modalIcon.style.color = 'var(--n4)';
-    $modalTitle.textContent = '¡Victòria!';
+    $modalTitle.textContent = 'Victòria!';
     $modalMsg.textContent = `Un compàs perfecte a "${LVL.name}". Has calculat cada figura amb precisió de compositor.`;
     const stars = getStars(LVL.id, seconds);
     $modalStars.innerHTML = Array.from({length:3}, (_,i) =>
@@ -488,6 +508,7 @@ function resetGame() {
   cancelPendingTimeouts();
   stopTimer();
   phase = 'idle'; firstClick = true; flags = 0; seconds = 0;
+  if (window.AulaTechBridge) window.AulaTechBridge.startClock();
   $timer.textContent     = '000';
   $minesLeft.textContent = String(MINES).padStart(3, '0');
   $modal.classList.add('hidden');
@@ -527,6 +548,17 @@ document.addEventListener('keydown', e => {
 });
 $resetBtn.addEventListener('click', resetGame);
 $modalBtn.addEventListener('click', resetGame);
+
+// Botó de mode batuta (marcar amb un toc, pensat per a tàctil)
+const $flagBtn = document.getElementById('flag-btn');
+if ($flagBtn) {
+  $flagBtn.addEventListener('click', () => {
+    flagMode = !flagMode;
+    $flagBtn.classList.toggle('active', flagMode);
+    $flagBtn.setAttribute('aria-pressed', String(flagMode));
+    document.body.classList.toggle('flag-mode', flagMode);
+  });
+}
 
 // Botó de so (mute)
 const $muteBtn = document.getElementById('mute-btn');
