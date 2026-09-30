@@ -488,10 +488,7 @@ function showModal(won) {
     $modalIcon.style.color = 'var(--n4)';
     $modalTitle.textContent = 'Victòria!';
     $modalMsg.textContent = `Un compàs perfecte a "${LVL.name}". Has calculat cada figura amb precisió de compositor.`;
-    const stars = getStars(LVL.id, seconds);
-    $modalStars.innerHTML = Array.from({length:3}, (_,i) =>
-      `<span class="star ${i < stars ? 'lit' : ''}">★</span>`
-    ).join('');
+    $modalStars.innerHTML = '<span class="star lit">✓</span><span>Nivell superat</span>';
   } else {
     $modalIcon.innerHTML = SVG.mine;
     $modalIcon.style.color = 'var(--mine)';

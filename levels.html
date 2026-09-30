@@ -41,12 +41,12 @@
     const grid = document.getElementById('levels-grid');
 
     LEVELS.forEach((lvl, i) => {
-      const best  = getBestTime(lvl.id);
-      const stars = getStars(lvl.id, best);
+      const best  = getBestTime(lvl.id);   // victòria desada = FET
 
       const card = document.createElement('a');
       card.href  = `game.html?level=${lvl.id}`;
       card.className = 'lvl-card';
+      card.setAttribute('aria-label', `Nivell ${i + 1}: ${lvl.name}${best ? ', fet' : ''}`);
       card.style.setProperty('--accent', lvl.accent);
       card.style.setProperty('--glow',   lvl.glow);
       card.style.animationDelay = (i * 0.07) + 's';
@@ -56,12 +56,8 @@
         `<div class="dseg ${j <= i ? 'filled' : ''}"></div>`
       ).join('');
 
-      // Estrelles
-      const starsHtml = best
-        ? Array.from({length:3}, (_,j) =>
-            `<span class="star ${j < stars ? 'lit' : ''}">★</span>`
-          ).join('')
-        : '';
+      // Fet / no fet
+      const starsHtml = best ? '<span class="star lit">✓</span>' : '';
 
       card.innerHTML = `
         <div class="card-top">
