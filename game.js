@@ -487,13 +487,13 @@ function showModal(won) {
     $modalIcon.innerHTML = SVG.n4;
     $modalIcon.style.color = 'var(--n4)';
     $modalTitle.textContent = 'Victòria!';
-    $modalMsg.textContent = `Un compàs perfecte a "${LVL.name}". Has calculat cada figura amb precisió de compositor.`;
+    $modalMsg.textContent = CURS1 ? `Molt bé! Has trobat tots els silencis a "${LVL.name}".` : `Un compàs perfecte a "${LVL.name}". Has calculat cada figura amb precisió de compositor.`;
     $modalStars.innerHTML = '<span class="star lit">✓</span><span>Nivell superat</span>';
   } else {
     $modalIcon.innerHTML = SVG.mine;
     $modalIcon.style.color = 'var(--mine)';
     $modalTitle.textContent = 'Game Over!';
-    $modalMsg.textContent = 'Has trencat el ritme. Utilitza les figures per calcular on s\'amaguen els silencis.';
+    $modalMsg.textContent = CURS1 ? 'Has tocat un silenci. Mira les figures i torna-ho a provar!' : 'Has trencat el ritme. Utilitza les figures per calcular on s\'amaguen els silencis.';
     $modalStars.innerHTML = '';
   }
   $modalTime.textContent = `Temps: ${fmtTime(seconds)}`;

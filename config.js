@@ -54,14 +54,40 @@ const LEVELS = [
   }
 ];
 
+// Mode 1r ESO (?curs=1): 3 taulers petits, agògica de 1r, textos curts, rècords a part
+const CURS1 = new URLSearchParams(location.search).get('curs') === '1';
+const BR_KEY = CURS1 ? '_c1' : '';
+if (CURS1) {
+  LEVELS.length = 3;
+  Object.assign(LEVELS[0], { name: 'Lento',   tempo: '♩ = 60',  desc: 'Lent i tranquil' });
+  Object.assign(LEVELS[1], { name: 'Andante', tempo: '♩ = 80',  desc: 'Al pas, com qui camina' });
+  Object.assign(LEVELS[2], { name: 'Allegro', tempo: '♩ = 110', desc: 'Ràpid i alegre' });
+  const C1 = {
+    '.landing-title': 'Cerca els silencis',
+    '.landing-sub': 'Destapa les caselles. Les figures et diuen quants silencis hi ha a prop.',
+    '.landing-pills span:nth-child(1)': '3 Nivells',
+    '.landing-pills span:nth-child(2)': 'Lento → Allegro',
+    '.lvl-header-txt p': 'De Lento a Allegro · 3 reptes',
+    '.hint': 'Clic: destapa · Clic dret: posa la batuta'
+  };
+  document.addEventListener('DOMContentLoaded', () => {
+    for (const [sel, t] of Object.entries(C1)) { const el = document.querySelector(sel); if (el) el.textContent = t; }
+    // Enllaços interns: conserva ?curs=1
+    document.querySelectorAll('a[href]').forEach(a => {
+      const h = a.getAttribute('href');
+      if (!h.includes('/')) a.setAttribute('href', h + (h.includes('?') ? '&' : '?') + 'curs=1');
+    });
+  });
+}
+
 function getBestTime(levelId) {
-  return parseInt(localStorage.getItem(`br_best_${levelId}`) || '0');
+  return parseInt(localStorage.getItem(`br_best_${levelId}${BR_KEY}`) || '0');
 }
 
 function saveBestTime(levelId, seconds) {
   const prev = getBestTime(levelId);
   if (!prev || seconds < prev)
-    localStorage.setItem(`br_best_${levelId}`, seconds);
+    localStorage.setItem(`br_best_${levelId}${BR_KEY}`, seconds);
 }
 
 function fmtTime(s) {

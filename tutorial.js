@@ -61,6 +61,23 @@ const STEPS = [
   }
 ];
 
+if (CURS1) [
+  ['Benvingut!', `Al tauler s'amaguen <strong>${MINES} silencis</strong>. Destapa totes les caselles sense tocar-ne cap.`],
+  ['El tauler', `Les caselles comencen tapades. Fes <strong>clic</strong> per destapar-ne una.`],
+  ['Les figures', `Cada figura diu quants silencis toquen la casella:
+      <ul>
+        <li>Negra = 1 temps = 1 silenci</li>
+        <li>Blanca = 2 temps = 2 silencis</li>
+        <li>Blanca amb puntet = 3 temps = 3 silencis</li>
+        <li>Rodona = 4 temps = 4 silencis</li>
+      </ul>El <strong>puntet</strong> suma la meitat de la figura.`],
+  ['La batuta 🪄', `Creus que hi ha un silenci? Fes <strong>clic dret</strong> i posa-hi la batuta 🪄.`],
+  ['Zones buides', `Si una casella no té silencis a prop, s'obre tot el tros buit.`],
+  ['Som-hi!', `🎉 <strong>Guanyes</strong> si destapes totes les caselles bones.<br>
+    ${T_SVG.mine} <strong>Perds</strong> si toques un silenci.<br><br>
+    El primer clic mai és un silenci.`]
+].forEach(([title, body], i) => Object.assign(STEPS[i], { title, body }));
+
 let step       = 0;
 let hlElement  = null;
 
@@ -88,7 +105,7 @@ function closeTutorial() {
   removeHL();
   $overlay.classList.add('hidden');
   $card.classList.add('hidden');
-  if (FROM_LANDING) location.href = 'index.html';
+  if (FROM_LANDING) location.href = CURS1 ? 'index.html?curs=1' : 'index.html';
 }
 
 function render(i) {
