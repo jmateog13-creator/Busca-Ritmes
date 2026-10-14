@@ -361,7 +361,10 @@ function checkWin() {
   phase = 'won';
   seconds = Math.max(1, seconds); // evita "Temps: —" / 0★ en victòries instantànies
   saveBestTime(LVL.id, seconds);
-  if (window.AulaTechBridge) window.AulaTechBridge.sendOnce('busca-ritmes', { completat: true, tempsMs: seconds * 1000 });
+  if (window.AulaTechBridge) window.AulaTechBridge.sendOnce('busca-ritmes', {
+    // Taulers lliures: paga el darrer (el més difícil), mai el tutorial.
+    completat: LVL.id === LEVELS[LEVELS.length - 1].id && !new URLSearchParams(location.search).has('tutorial'),
+    tempsMs: seconds * 1000 });
 
   Sounds.victory();
   $board.classList.add('state-won');
