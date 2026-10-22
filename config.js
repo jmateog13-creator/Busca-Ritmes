@@ -54,20 +54,23 @@ const LEVELS = [
   }
 ];
 
-// Mode 1r ESO (?curs=1): 3 taulers petits, agògica de 1r, textos curts, rècords a part
+// Mode 1r ESO (?curs=1): 6 taulers = els 6 tempos bàsics de 1r, en ordre; rècords a part
 const CURS1 = new URLSearchParams(location.search).get('curs') === '1';
 const BR_KEY = CURS1 ? '_c1' : '';
 if (CURS1) {
-  LEVELS.length = 3;
-  Object.assign(LEVELS[0], { name: 'Lento',   tempo: '♩ = 60',  desc: 'Lent i tranquil' });
-  Object.assign(LEVELS[1], { name: 'Andante', tempo: '♩ = 80',  desc: 'Al pas, com qui camina' });
-  Object.assign(LEVELS[2], { name: 'Allegro', tempo: '♩ = 110', desc: 'Ràpid i alegre' });
+  LEVELS.length = 6;
+  Object.assign(LEVELS[0], { name: 'Largo',    tempo: '♩ = 50',  desc: 'Molt lent i tranquil' });
+  Object.assign(LEVELS[1], { name: 'Adagio',   tempo: '♩ = 72',  desc: 'Lent, sense presses' });
+  Object.assign(LEVELS[2], { name: 'Andante',  tempo: '♩ = 92',  desc: 'Al pas, com qui camina' });
+  Object.assign(LEVELS[3], { name: 'Moderato', tempo: '♩ = 112', desc: 'Ni lent ni ràpid' });
+  Object.assign(LEVELS[4], { name: 'Allegro',  tempo: '♩ = 140', desc: 'Ràpid i alegre' });
+  Object.assign(LEVELS[5], { name: 'Presto',   tempo: '♩ = 184', desc: 'Molt ràpid: el repte final' });
   const C1 = {
     '.landing-title': 'Cerca els silencis',
     '.landing-sub': 'Destapa les caselles. Les figures et diuen quants silencis hi ha a prop.',
-    '.landing-pills span:nth-child(1)': '3 Nivells',
-    '.landing-pills span:nth-child(2)': 'Lento → Allegro',
-    '.lvl-header-txt p': 'De Lento a Allegro · 3 reptes',
+    '.landing-pills span:nth-child(1)': '6 Nivells',
+    '.landing-pills span:nth-child(2)': 'Largo → Presto',
+    '.lvl-header-txt p': 'De Largo a Presto · 6 reptes',
     '.hint': 'Clic: destapa · Clic dret: posa la batuta'
   };
   document.addEventListener('DOMContentLoaded', () => {
@@ -79,6 +82,9 @@ if (CURS1) {
     });
   });
 }
+
+// 1r: els nivells s'obren en ordre (cal haver guanyat l'anterior)
+function isLocked(i) { return CURS1 && i > 0 && !getBestTime(LEVELS[i - 1].id); }
 
 function getBestTime(levelId) {
   return parseInt(localStorage.getItem(`br_best_${levelId}${BR_KEY}`) || '0');

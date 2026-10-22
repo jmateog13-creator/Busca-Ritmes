@@ -7,7 +7,9 @@
 
 // ─── Llegir nivell de la URL ───────────────────────────────
 const urlLevel = parseInt(new URLSearchParams(location.search).get('level') ?? '2');
-const LVL = LEVELS[Math.max(0, Math.min(urlLevel, LEVELS.length - 1))];
+let lvlIdx = Math.max(0, Math.min(urlLevel, LEVELS.length - 1));
+while (lvlIdx > 0 && isLocked(lvlIdx)) lvlIdx--;   // 1r: no es pot saltar cap nivell
+const LVL = LEVELS[lvlIdx];
 
 const ROWS    = LVL.rows;
 const COLS    = LVL.cols;
@@ -361,9 +363,11 @@ function checkWin() {
   phase = 'won';
   seconds = Math.max(1, seconds); // evita "Temps: —" / 0★ en victòries instantànies
   saveBestTime(LVL.id, seconds);
+  // Taulers lliures: paga el darrer (el més difícil), mai el tutorial. A 1r, només la primera vegada.
+  let fiJoc = LVL.id === LEVELS[LEVELS.length - 1].id && !new URLSearchParams(location.search).has('tutorial');
+  if (fiJoc && CURS1) { try { if (localStorage.getItem('br_completat_c1')) fiJoc = false; else localStorage.setItem('br_completat_c1', '1'); } catch (e) {} }
   if (window.AulaTechBridge) window.AulaTechBridge.sendOnce('busca-ritmes', {
-    // Taulers lliures: paga el darrer (el més difícil), mai el tutorial.
-    completat: LVL.id === LEVELS[LEVELS.length - 1].id && !new URLSearchParams(location.search).has('tutorial'),
+    completat: fiJoc,
     tempsMs: seconds * 1000 });
 
   Sounds.victory();

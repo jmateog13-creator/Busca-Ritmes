@@ -27,7 +27,7 @@
 
   </div>
 
-  <script src="config.js"></script>
+  <script src="config.js?v=6niv"></script>
   <script>
     'use strict';
 
@@ -45,6 +45,7 @@
 
       const card = document.createElement('a');
       card.href  = `game.html?level=${lvl.id}`;
+      if (isLocked(i)) { card.removeAttribute('href'); card.style.opacity = '.4'; card.style.pointerEvents = 'none'; card.setAttribute('aria-disabled', 'true'); }
       card.className = 'lvl-card';
       card.setAttribute('aria-label', `Nivell ${i + 1}: ${lvl.name}${best ? ', fet' : ''}`);
       card.style.setProperty('--accent', lvl.accent);
